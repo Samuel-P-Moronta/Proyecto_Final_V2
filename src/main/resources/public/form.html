@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="public/plantilla.html::head">
+
+</head>
+
+<body onload="updateOnlineStatus()">
+<!-- WRAPPER -->
+
+<div id="wrapper">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-default navbar-fixed-top" th:replace="public/plantilla.html::header">
+
+    </nav>
+    <!-- END NAVBAR -->
+    <!-- LEFT SIDEBAR -->
+    <div th:replace="public/plantilla.html::sidebar">
+
+    </div>
+    <!-- END LEFT SIDEBAR -->
+    <!-- MAIN -->
+    <div class="main">
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="container-fluid">
+                <!-- OVERVIEW -->
+                <div class="panel panel-headline">
+                    <div class="panel-heading">
+
+                        <h3 class="panel-title">OFICINA DE PLANEAMIENTO</h3>
+                        <p class="panel-subtitle">Pontificia Universidad Catolica Madre y Maestra</p>
+                        <!--PONER DIV AQUI O TEMPLATE PARA EL FORMULARIO--->
+                        <!--START FORMULARIO--->
+                        <div class="content" onload="listarDatos()">
+                            <div class="header">
+                                <p class="lead">Formulario de registro</p>
+                            </div>
+                            <!---PARA PRESENTAR AQUI LA FOTOGRAFIA TOMADA--->
+
+                            <div class="col-md-4">
+
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Fotografia</h3>
+                                    </div>
+
+
+                                    <div class="panel-body"  name="cameraPanel" id="cameraPanel">
+                                        <!--<div id="results" ></div>-->
+                                    </div>
+                                    <!--<div class="panel-footer">
+                                        <a class="btn btn-success update-pro" href="index.html#webcam-app"
+                                           title="TOMAR FOTOGRAFIA"
+                                           target="_blank"><i class="fa fa-camera"></i>
+                                            <span>TOMAR FOTOGRAFIA</span></a>
+                                    </div>-->
+                                    <div class="panel-footer">
+                                        <a id="startPhoto" href="#modalCamara"
+                                           class="btn btn-success update-pro" data-toggle="modal"><i class="fa fa-camera"></i>
+                                            <span>TOMAR FOTOGRAFIA</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="fancy-checkbox">
+                                                <span>Nombre completo</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="fullName" id="fullName"
+                                                   placeholder="Nombre Completo" onclick="GEOPosicion()" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="fancy-checkbox">
+                                                <span>Sector</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="sector" id="sector"
+                                                   placeholder="Sector" onclick="GEOPosicion()" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="fancy-checkbox">
+                                                <span>Academic Level</span>
+                                            </label>
+                                            <select name="academicLevel" id="academicLevel" placeholder="level"
+                                                    class="form-control"
+                                                    aria-required="true" onclick="GEOPosicion()" required>
+                                                <option selected> Nivel Academico</option>
+                                                <option name="academicLevel" value="Basico">Basico</option>
+                                                <option name="academicLevel" value="Medio">Medio</option>
+                                                <option name="academicLevel" value="Grado">Grado</option>
+                                                <option name="academicLevel" value="Maestria">Maestria</option>
+                                                <option name="academicLevel" value="Doctorado">Doctorado</option>
+                                            </select>
+                                        </div>
+                                        <input id="idUsuario" type="hidden" name="idUsuario" th:value="${user}">
+                                        <input type="hidden" name="latitude" id="latitude" value="">
+                                        <input type="hidden" name="longitude" id="longitude" value="">
+                                        <!--<input type="hidden" id="foto" value="">-->
+
+
+                                    </div>
+                                    <div class="panel-footer">
+                                        <button type="submit" onclick="addForm()">
+
+                                            <a class="btn btn-success update-pro" data-sm-link-text="CLICK"
+                                               title="TOMAR FOTOGRAFIA"
+                                               target="_blank"><i class="fa fa-save"></i>
+                                                <span>GUARDAR</span></a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <form class="form-auth-small" th:attr="action=${accion}" name="form"
+                                              id="form">
+                                            <h3 class="panel-title">Formularios registrados</h3>
+                                            <div class="table-responsive">
+                                                <table class="table" id="dataTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Foto</th>
+                                                        <th>Nombre</th>
+                                                        <th>Sector</th>
+                                                        <th>Nivel Academico</th>
+                                                        <th>Accion</th>
+
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="formList" name="formList">
+                                                    <tr th:each="aux : ${b}">
+                                                        <td th:text="${aux.id}"></td>
+                                                        <td th:text="${aux.photo}"></td>
+                                                        <td th:text="${aux.name}"></td>
+                                                        <td th:text="${aux.sector}"></td>
+                                                        <td th:text="${aux.academicLevel}"></td>
+                                                        <td>
+
+                                                            <a id="editar" href="#editModal" class="edit"
+                                                               data-toggle="modal"><i class="material-icons"
+                                                                                      data-toggle="tooltip"
+                                                                                      title="Editar">&#xE254;</i></a>
+                                                            <a id="borrar" href="#deleteModal" style="color: red"
+                                                               class="delete" data-toggle="modal"><i
+                                                                    class="material-icons" data-toggle="tooltip"
+                                                                    title="Borrar">&#xE872;</i></a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <button class="infoConexion" id="enviarForm" type="submit">
+                                            <a class="btn btn-success update-pro" data-sm-link-text="CLICK"
+                                               title="ENVIAR FORM"
+                                               target="_blank"><i class="fa fa-upload"></i>
+                                                <span>ENVIAR</span></a>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                    </div>
+                    <div class="buttons">
+                    </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main-content">
+    <div class="container-fluid">
+        <!-- OVERVIEW -->
+
+        <!-- Modal -->
+
+        <div class="modal fade" id="modalCamara" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="height: 360px; width: 342px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Camara</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="height: 293px">
+                        <div id="camara"></div>
+                        <div class="vertical-center">
+                            <a id="take" class="btn btn-success update-pro" data-dismiss="modal" onclick="take_snapchot()" ><i class="fa fa-camera"></i>
+                            </a>
+                        </div>
+
+                        <style>
+                            #camara{
+                                height: 500px;
+                                width: 100%;
+                            }
+                        </style>
+
+                        <script>
+
+                            //load webcam
+                            Webcam.set({
+                                width: 320,
+                                height: 240,
+                                image_format: 'jpeg',
+                                jpeg_quality: 90
+                            })
+                            Webcam.attach("#camara")
+                            function take_snapchot(){
+                                Webcam.snap( function(data_uri) {
+                                    // display results in page
+                                    document.getElementById('cameraPanel').innerHTML =
+                                        '<img src="'+data_uri+'"/>';
+                                } );
+                            }
+                        </script>
+                    </div>
+
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar
+                        </button>-->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Edit Modal HTML --> <!--Editar Formulario-->
+        <div id="editModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="formEdit" name="formEdit" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Form</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="fancy-checkbox">
+                                        <span>Nombre completo</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="fullNameEdit"
+                                           name="fullNameEdit" placeholder="Nombre" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="fancy-checkbox">
+                                        <span>Sector</span>
+                                    </label>
+                                    <input type="text" class="form-control" name="sectorEdit"
+                                           id="sectorEdit"
+                                           placeholder="Sector" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="fancy-checkbox">
+                                        <span>Academic Level</span>
+                                    </label>
+                                    <select name="academicLevelEdit" id="academicLevelEdit"
+                                            placeholder="level"
+                                            class="form-control"
+                                            aria-required="true" required>
+                                        <option selected value="0"> Nivel Academico</option>
+                                        <option name="academicLevel" value="Basico">Basico</option>
+                                        <option name="academicLevel" value="Medio">Medio</option>
+                                        <option name="academicLevel" value="Grado">Grado</option>
+                                        <option name="academicLevel" value="Maestria">Maestria</option>
+                                        <option name="academicLevel" value="Doctorado">Doctorado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="idEdit" name="idEdit" value="">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+                            </button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal"
+                                    onclick="updateForm()">Editar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- END MAIN CONTENT -->
+        <!-- Delete Modal HTML -->
+        <div id="deleteModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form name="f2" id="f2">
+                        <input type="hidden" id="idBorrar" name="idBorrar" class="btn btn-danger" value="">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Borrar Formulario</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Seguro que desea eliminar este formulario?</p>
+                            <p class="text-danger"><small>Esta accion no se puede deshacer.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar
+                            </button>
+                            <button type="button" id="btnEliminar" class="btn btn-danger"
+                                    data-dismiss="modal"
+                                    onclick="deleteForm()">Eliminar
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!---MODAL SI NO HAY DATA EN LA TABLA QUE NO SE PERMITA ENVIAR FORMS--->
+        <div id="infoRegister" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <input type="hidden" class="btn btn-danger" value="">
+                        <div class="modal-header">
+                            <h2 class="modal-title" Formulario></h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h2>No hay informacion registrada..</h2>
+                            <h3 class="text-danger">Favor registrar un formulario</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar
+                            </button>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END OVERVIEW -->
+
+    <!-- END MAIN CONTENT -->
+</div>
+<!-- END MAIN -->
+<!-- END WRAPPER -->
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+<script src="/assets/vendor/chartist/js/chartist.min.js"></script>
+<script src="/assets/scripts/klorofil-common.js"></script>
+<!--<script src="assets/scripts/editDelete.js"></script>--->
+<script src="scripts/validCamps.js"></script>
+<script src="scripts/indexDB.js"></script>
+<script src="scripts/editDelete.js"></script>
+
+
+</body>
+<!-- Javascript -->
+
+</html>

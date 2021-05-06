@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>Registro | OP-PUCMM</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/vendor/linearicons/style.css">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/pucmm-logo.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../assets/img/favicon.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #00A0F0;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+        }
+
+        .header h4 {
+            border-bottom: 1px solid #f0f0f0;
+            background-color: #f7f7f7;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        #formLista{
+
+        }
+    </style>
+
+
+
+</head>
+
+<body onload="GEOLOCATION">
+<!-- WRAPPER -->
+<div id="wrapper">
+    <div class="vertical-align-wrap">
+        <div class="vertical-align-middle">
+            <div class="panel" style="width: 900px; margin-left: auto; margin-right: auto;">
+                <div class="left">
+                    <div class="panel-body">
+                        <div class="header">
+                            <h4 class="lead">REST CLIENT</h4>
+                            <form method="get" action="/logOutRest">
+                                <button type="submit" class="btn btn-success">
+                                    <a class="btn btn-success update-pro" data-sm-link-text="CLICK"
+                                       target="_blank"><i class="fa fa-sign-out"></i>
+                                        <span>LOG OUT</span></a>
+                                </button>
+                            </form>
+                        </div>
+                        <br>
+                        <form method="post" enctype="multipart/form-data" class="form-auth-small" action="/api/formularios">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-id-card"></i></span>
+                                    <input  type="text" class="form-control" name="fullNameRest" id="fullNameRest" placeholder="Nombre" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-map"></i></span>
+                                    <input type="text" class="form-control" name="sectorRest" id="sectorRest" placeholder="Sector" required  onclick="GEOLOCATION()"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-file-picture-o"></i></span>
+                                    <input  class="form-control" name="fotoR" id="foto" type="file"  placeholder="Foto" multiple required onclick="GEOLOCATION()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
+                                    <select name="academicLevelRest" id="academicLevelRest" placeholder="role"
+                                            class="form-control"
+                                            aria-required="true" required>
+                                        <option value="">Nivel Academico</option>
+                                        <option name="academicLevelRest" value="Basico">Administrador</option>
+                                        <option name="academicLevelRest" value="Medio">Medio</option>
+                                        <option name="academicLevelRest" value="Grado">Grado</option>
+                                        <option name="academicLevelRest" value="Maestria">Maestria</option>
+                                        <option name="academicLevelRest" value="Doctorado">Doctorado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" name="latitude" id="latitude" value="">
+                            <input type="hidden" id="longitude" name="longitude" value="">
+                            <div class="col-md-12">
+                                <br>
+                                <h6 DIV ALIGN=center th:text="${Error}" style="color:#ff0000"></h6>
+                                <h6 DIV ALIGN=center th:text="${Success}" style="color:#00A0F0"></h6>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-save"></i>GUARDAR
+                                FORMULARIO
+                            </button>
+                            <p></p>
+                            <!-- END LOGIN ENTERING -->
+                            <div class="col-md-12">
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <h3 class="panel-title">LISTADO DE FORMULARIOS</h3>
+                                        <div class="table-responsive">
+
+                                            <!--<div class="container">
+                                                <div class="starter-template">
+                                                    <fieldset>
+                                                        <h1> <u>Your Order</u> </h1>
+
+                                                        <table id = "dataTable" border="1">
+                                                            <th>FOTO</th>
+                                                            <th>NOMBRE COMPLETO</th>
+                                                            <th>SECTOR</th>
+                                                            <th>NIVEL ACADEMICO</th>
+                                                            <th>USUARIO</th>
+                                                        </table>
+                                                    </fieldset>
+                                                </div>
+                                            </div>-->
+                                            <table class="table" id="dataTabla">
+                                                <thead>
+                                                <tr>
+                                                    <th>FOTO</th>
+                                                    <th>NOMBRE</th>
+                                                    <th>SECTOR</th>
+                                                    <th>N. ACADEMICO</th>
+                                                    <th>LONGITUDE</th>
+                                                    <th>LATITUDE</th>
+                                                    <th>USUARIO</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody id="formLista" name="formLista">
+                                                <tr th:each="aux : ${formularios}" >
+
+                                                </tr>
+                                                </tbody>
+
+                                            </table>
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                                            <script th:inline="javascript">
+
+                                                /*<![CDATA[*/
+                                                // var forms = JSON.parse([[${formularios}]]);
+                                                var forms = JSON.parse(/*[[${formularios}]]*/ 'default');
+
+
+                                                /*]]>*/
+
+                                                // '[{\"id\":1,\"name\":\"Juan\",\"sector\":\"Santiago\",\"academicLevel\":\"Grado\",\"photo\":{\"fotoBase64\":\"\"},\"user\":{\"username\":\"admin\",\"fullName\":\"Samuel Pe�a\",\"password\":\"admin\",\"rolesList\":[\"ROLE_EMPLEADO\",\"ROLE_ADMIN\"]},\"location\":{\"longitude\":-70.663414,\"latitude\":19.453105}}, {\"id\":2,\"name\":\"Soto Bello\",\"sector\":\"Santiago\",\"academicLevel\":\"Doctorado\",\"photo\":{\"fotoBase64\":\"\"},\"user\":{\"username\":\"admin\",\"fullName\":\"Samuel Pe�a\",\"password\":\"admin\",\"rolesList\":[\"ROLE_EMPLEADO\",\"ROLE_ADMIN\"]},\"location\":{\"longitude\":-70.644531,\"latitude\":19.453105}}, {\"id\":3,\"name\":\"Dilapa Batista\",\"sector\":\"Santiago\",\"academicLevel\":\"Medio\",\"photo\":{\"fotoBase64\":\"\"},\"user\":{\"username\":\"admin\",\"fullName\":\"Samuel Pe�a\",\"password\":\"admin\",\"rolesList\":[\"ROLE_EMPLEADO\",\"ROLE_ADMIN\"]},\"location\":{\"longitude\":-70.664787,\"latitude\":19.473174}}]'
+                                                console.log("forms: ")
+                                                //console.log(forms)
+                                                productListSuccess(forms)
+
+                                                function productListSuccess(formularios) {
+                                                    console.log("aqui: ")
+
+
+                                                    var fila = ""
+                                                    for (var key in formularios) {
+                                                        fila += "<tr>"
+                                                        fila += "<td>" + "<img src="+formularios[key].photo.fotoBase64 + " style=\"height: 100px; width: 100px\" alt=\"No tiene foto\" >" + "</td>"
+                                                        console.log(formularios[key].photo.fotoBase64)
+                                                        //src="@{'data:'+${aux.getMimeType()}+';base64,'+${aux.getFotoBase64()}}"
+                                                        fila += "<td>" + formularios[key].name + "</td>"
+                                                        fila += "<td>" + formularios[key].sector + "</td>"
+                                                        fila += "<td>" + formularios[key].academicLevel + "</td>"
+                                                        fila += "<td>" + formularios[key].location.longitude + "</td>"
+                                                        fila += "<td>" + formularios[key].location.latitude + "</td>"
+                                                        fila += "<td>" + formularios[key].user.username + "</td>"
+                                                        fila += "</tr>"
+                                                    }
+                                                    document.getElementById("formLista").innerHTML = fila
+
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function GEOLOCATION(){
+
+        function success(pos){
+            console.log('Working...')
+            var crd = pos.coords
+            document.querySelector("#latitude").value = crd.latitude;
+            document.querySelector("#longitude").value = crd.longitude;
+        }
+        navigator.geolocation.getCurrentPosition(success)
+    }
+
+</script>
+
+
+<!-- END WRAPPER -->
+
+</body>
+</html>
